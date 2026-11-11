@@ -1,0 +1,10 @@
+body.locked > :not(#site-access-gate){visibility:hidden!important}
+#site-access-gate{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:24px;background:#f7f8fa;color:#14181f;font:400 15px/1.55 Poppins,system-ui,sans-serif}
+#site-access-gate[hidden]{display:none}
+#site-access-gate .gate-card{width:min(100%,420px);padding:36px;border:1px solid #e3e6ea;border-radius:18px;background:#fff;box-shadow:0 18px 60px rgba(20,24,31,.12)}
+#site-access-gate h1{font-size:24px;line-height:1.2;margin:0 0 8px}
+#site-access-gate p{margin:0 0 22px;color:#5b6472}
+#site-access-gate label{display:block;margin-bottom:7px;font-weight:600}
+#site-access-gate input{width:100%;padding:12px 14px;border:1px solid #cbd2dc;border-radius:8px;font:inherit}
+#site-access-gate button{width:100%;margin-top:14px;padding:12px;border:0;border-radius:8px;background:#1f3a8a;color:white;font:inherit;font-weight:600;cursor:pointer}
+#site-access-gate [role=status]{min-height:24px;margin:10px 0 0;color:#b91c1c;font-size:13px}

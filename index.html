@@ -2,11 +2,21 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="refresh" content="0; url=out/lit-by-cardi-sgeo-comparateur.html">
+  <link rel="stylesheet" href="assets/site-access.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LIT by CARDI — Comparateur SGEO</title>
 </head>
-<body>
+<body class="locked">
+<section id="site-access-gate" aria-labelledby="site-access-title">
+  <form class="gate-card" data-redirect="out/lit-by-cardi-sgeo-comparateur.html">
+    <h1 id="site-access-title">Accès protégé</h1>
+    <p>Saisis le mot de passe pour consulter le site SGEO Sonepar.</p>
+    <label for="site-access-password">Mot de passe</label>
+    <input id="site-access-password" type="password" autocomplete="current-password" required autofocus>
+    <button type="submit">Accéder au site</button>
+    <p role="status" aria-live="polite"></p>
+  </form>
+</section>
   <p><a href="out/lit-by-cardi-sgeo-comparateur.html">Ouvrir le comparateur LIT by CARDI</a></p>
-</body>
+<script src="assets/site-access.js"></script></body>
 </html>
