@@ -1,0 +1,787 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coulisses SGEO : LIT by CARDI sur Sonepar.fr</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.bunny.net/css?family=poppins:400,500,600,700&display=swap">
+<style>
+:root{--ink:#14181f;--mut:#5b6472;--line:#e3e6ea;--bg:#f7f8fa;--acc:#1f3a8a;--ok:#15803d;--ko:#b91c1c}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font:400 15px/1.65 Poppins,system-ui,sans-serif;color:var(--ink);background:#fff}
+header.top{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px;padding:12px 24px}
+header.top strong{font-weight:600}header.top a.back{margin-left:auto;text-decoration:none;color:#fff;background:var(--acc);padding:8px 16px;border-radius:999px;font-weight:600;font-size:13px}
+.layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:40px;max-width:1280px;margin:0 auto;padding:32px 24px 96px}
+nav.toc{position:sticky;top:76px;align-self:start;font-size:13px}nav.toc a{display:block;color:var(--mut);text-decoration:none;padding:5px 0}nav.toc a:hover{color:var(--ink)}
+nav.toc b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#98a1af;margin:0 0 8px}
+h1{font-size:34px;line-height:1.2;margin:0 0 12px;font-weight:700}
+h2{font-size:24px;margin:56px 0 6px;font-weight:700;scroll-margin-top:84px}h3{font-size:16px;margin:24px 0 8px}
+p{margin:8px 0}.lead{font-size:17px;color:#3b4350;max-width:760px}.mut{color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 16px}.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:#eef1f5;color:#3b4350}
+.chip.where{background:#e0e7ff;color:#1e3a8a}.imp-h{background:#dcfce7;color:#166534}.imp-m{background:#fef3c7;color:#92400e}.imp-l{background:#f1f5f9;color:#475569}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}.bcol{border-radius:10px;border:1px solid var(--line);overflow:hidden;min-width:0}
+.bcol.bad{border-top:3px solid var(--ko)}.bcol.good{border-top:3px solid var(--ok)}
+.blabel{font-size:12px;font-weight:700;padding:8px 12px;background:var(--bg);letter-spacing:.02em}
+pre.code{margin:0;padding:12px;overflow:auto;font:12.5px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;background:#0f172a;color:#e2e8f0;white-space:pre}
+.single pre.code{border-radius:10px}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.5px;margin:12px 0}.tbl th,.tbl td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}.tbl th{background:var(--bg);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut)}
+code{font:12.5px ui-monospace,Menlo,monospace;background:#eef1f5;padding:1px 5px;border-radius:4px}
+pre.code code{background:none;padding:0;color:inherit;border-radius:0;font-size:inherit}
+.note{border-left:3px solid #f59e0b;background:#fffbeb;padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;font-size:14px}
+.why{border-left:3px solid var(--acc);background:#eef2ff;padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;font-size:14px}
+details.fold{border:1px solid var(--line);border-radius:10px;margin:12px 0}details.fold summary{cursor:pointer;padding:10px 14px;font-weight:600;font-size:14px}details.fold pre.code{border-radius:0 0 10px 10px}
+ul.clean{padding-left:20px}ul.clean li{margin:4px 0}
+.plan{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.plan>div{border:1px solid var(--line);border-radius:10px;padding:14px 16px}.plan h3{margin-top:0}
+@media(max-width:980px){.layout{grid-template-columns:1fr}nav.toc{display:none}.ba,.plan{grid-template-columns:1fr}}
+</style></head><body>
+<header class="top"><strong>Coulisses SGEO</strong><span class="mut">LIT by CARDI sur Sonepar.fr</span><a class="back" href="lit-by-cardi-sgeo-comparateur.html#sgeo=1&assets=1">← Comparateur avant / après</a></header>
+<div class="layout">
+<nav class="toc"><b>Sommaire</b>
+<a href="#synthese">Synthèse des chantiers</a><a href="#head">1. Balises du head</a><a href="#jsonld">2. Données structurées</a><a href="#urls">3. URL et redirections</a>
+<a href="#robots">4. robots.txt et robots IA</a><a href="#llms">5. llms.txt</a><a href="#sitemap">6. Sitemaps et indexation</a><a href="#http">7. En-têtes HTTP et cache</a>
+<a href="#perf">8. Performance et rendu</a><a href="#alt">9. Alt, Hn, maillage</a><a href="#produit">10. Données produit</a><a href="#entite">11. Entité et hors site</a><a href="#mesure">12. Mesure</a><a href="#plan">Plan de déploiement</a><a href="#hypotheses">Limites et hypothèses</a></nav>
+<main>
+<h1>Tout ce qui se passe en coulisses</h1>
+<p class="lead">Le comparateur montre ce qui change à l’écran. Cette page documente le reste : ce qu’il faudrait réellement faire côté serveur, template, CDN, sitemap et hors site pour que cette page marque soit lisible, citable et fiable pour Google comme pour les moteurs de réponse IA. Les constats « aujourd’hui » ont été mesurés sur la page en production le 9 novembre 2026.</p>
+<p class="mut">Pile observée : Next.js (pages router, rendu serveur), Cloudflare, et un CMS qui semble être CoreMedia (URL « caas »). Les propositions sont écrites pour cette pile.</p>
+
+<h2 id="synthese">Synthèse des chantiers</h2>
+<table class="tbl"><thead><tr><th>#</th><th>Chantier</th><th>Où</th><th>Qui</th><th>Effort</th><th>Impact</th></tr></thead><tbody><tr><td>01</td><td>Balises title, description, robots, Open Graph</td><td>Template Next.js</td><td>Dev + SEO</td><td>0,5 j</td><td><span class="chip imp-h">Élevé</span></td></tr><tr><td>02</td><td>JSON-LD : corriger le bug "undefined" et bâtir un graphe d’entités</td><td>Template Next.js</td><td>Dev + SEO</td><td>1 à 2 j</td><td><span class="chip imp-h">Élevé</span></td></tr><tr><td>03</td><td>URL de marque unique, 301 et canonical</td><td>Cloudflare + Next.js</td><td>Dev</td><td>1 j</td><td><span class="chip imp-h">Élevé</span></td></tr><tr><td>04</td><td>robots.txt : politique par robot IA</td><td>Racine du domaine</td><td>SEO + Juridique</td><td>0,5 j</td><td><span class="chip imp-m">Moyen</span></td></tr><tr><td>05</td><td>llms.txt (et version Markdown des pages marque)</td><td>Racine du domaine</td><td>SEO + Dev</td><td>0,5 à 1 j</td><td><span class="chip imp-m">Moyen</span></td></tr><tr><td>06</td><td>Sitemap des marques, lastmod fiable, hreflang, images</td><td>Génération de sitemaps</td><td>Dev</td><td>1 j</td><td><span class="chip imp-m">Moyen</span></td></tr><tr><td>07</td><td>Cache CDN et en-têtes HTTP (suppression du Set-Cookie sur HTML anonyme)</td><td>Cloudflare + serveur</td><td>Dev / Infra</td><td>1 à 2 j</td><td><span class="chip imp-h">Élevé</span></td></tr><tr><td>08</td><td>Performance : hero prioritaire, __NEXT_DATA__ allégé, formats d’image</td><td>Template + CMS</td><td>Dev</td><td>2 à 3 j</td><td><span class="chip imp-m">Moyen</span></td></tr><tr><td>09</td><td>Alt, structure Hn, liens internes sans redirection</td><td>CMS + template</td><td>Contenu + Dev</td><td>1 j</td><td><span class="chip imp-m">Moyen</span></td></tr><tr><td>10</td><td>Fiches produit : attributs techniques structurés (lm, K, IP, IK, IRC, UGR, EAN)</td><td>PIM + template</td><td>Produit + Dev</td><td>Continu</td><td><span class="chip imp-h">Élevé</span></td></tr><tr><td>11</td><td>Entité et autorité hors site : Wikidata, annuaires, YouTube (transcription)</td><td>Hors site</td><td>SEO + Marque</td><td>Continu</td><td><span class="chip imp-m">Moyen</span></td></tr><tr><td>12</td><td>Mesure : logs robots IA, Search Console, panel de prompts</td><td>Analytics + logs</td><td>SEO + Data</td><td>1 j puis mensuel</td><td><span class="chip imp-h">Élevé</span></td></tr></tbody></table>
+
+<h2 id="head">1. Balises du head</h2>
+<div class="chips"><span class="chip where">Template Next.js</span><span class="chip">Qui : Dev + SEO</span><span class="chip">Effort : 0,5 j</span><span class="chip imp-h">Impact : Élevé</span></div>
+<p>Le titre de la page se limite à 12 caractères (« LIT by Cardi »), sans mot clé ni signature, et la meta description « Les marques en ligne de Sonepar » est générique, sans lien avec l’éclairage. Il n’y a ni balise robots, ni Open Graph, ni Twitter Card : un partage sur LinkedIn ou Slack n’affiche donc aucun visuel.</p>
+<div class="ba"><div class="bcol bad"><div class="blabel">Aujourd’hui (observé le 9 novembre 2026)</div><pre class="code"><code>&lt;title&gt;LIT by Cardi&lt;/title&gt;
+&lt;meta name=&quot;description&quot; content=&quot;Les marques en ligne de Sonepar&quot;&gt;
+&lt;meta name=&quot;keywords&quot; content=&quot;&quot;&gt;
+&lt;link rel=&quot;canonical&quot; href=&quot;https://www.sonepar.fr/catalog/fr-fr/brand/LIT%20by%20Cardi&quot;&gt;
+&lt;link rel=&quot;alternate&quot; hreflang=&quot;fr-fr&quot; href=&quot;https://www.sonepar.fr/catalog/fr-fr/brand/LIT%20by%20Cardi&quot;&gt;
+&lt;!-- aucune balise robots, Open Graph ni Twitter Card --&gt;</code></pre></div><div class="bcol good"><div class="blabel">Après SGEO</div><pre class="code"><code>&lt;title&gt;LIT by CARDI : éclairage LED professionnel | Sonepar&lt;/title&gt;   &lt;!-- 52 caractères --&gt;
+&lt;meta name=&quot;description&quot; content=&quot;LIT by CARDI, la marque 100% LED de CARDI : panels, downlights, étanches, projecteurs, tubes et lampes. Catalogue 2026-2027 et gamme Ready Range.&quot;&gt;   &lt;!-- 145 caractères --&gt;
+&lt;meta name=&quot;robots&quot; content=&quot;index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1&quot;&gt;
+&lt;link rel=&quot;canonical&quot; href=&quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi&quot;&gt;
+&lt;link rel=&quot;alternate&quot; hreflang=&quot;fr-fr&quot; href=&quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi&quot;&gt;
+&lt;link rel=&quot;alternate&quot; hreflang=&quot;x-default&quot; href=&quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi&quot;&gt;
+&lt;meta property=&quot;og:type&quot; content=&quot;website&quot;&gt;
+&lt;meta property=&quot;og:site_name&quot; content=&quot;Sonepar&quot;&gt;
+&lt;meta property=&quot;og:locale&quot; content=&quot;fr_FR&quot;&gt;
+&lt;meta property=&quot;og:title&quot; content=&quot;LIT by CARDI : éclairage LED professionnel | Sonepar&quot;&gt;
+&lt;meta property=&quot;og:description&quot; content=&quot;LIT by CARDI, la marque 100% LED de CARDI : panels, downlights, étanches, projecteurs, tubes et lampes. Catalogue 2026-2027 et gamme Ready Range.&quot;&gt;
+&lt;meta property=&quot;og:url&quot; content=&quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi&quot;&gt;
+&lt;meta property=&quot;og:image&quot; content=&quot;https://fra-connect.mo.cloudinary.net/scontent/caas/v1/media/116509456/data/7b9544532b7568c23657e19dc40c4620/7x2/1280/image-banni%C3%A8re-lit-by-cardi-landing.jpg&quot;&gt;
+&lt;meta name=&quot;twitter:card&quot; content=&quot;summary_large_image&quot;&gt;
+&lt;!-- suppression de &lt;meta name=&quot;keywords&quot; content=&quot;&quot;&gt; (vide, sans effet) --&gt;</code></pre></div></div>
+<div class="why"><b>Pourquoi pour le SGEO.</b> Le titre et la description sont les premiers éléments que les moteurs et les assistants IA lisent pour décider de quoi parle la page. Les directives <code>max-snippet:-1</code> et <code>max-image-preview:large</code> autorisent des extraits complets et de grandes images dans les résultats et les aperçus IA.</div>
+
+<h2 id="jsonld">2. Données structurées (JSON-LD)</h2>
+<div class="chips"><span class="chip where">Template Next.js</span><span class="chip">Qui : Dev + SEO</span><span class="chip">Effort : 1 à 2 j</span><span class="chip imp-h">Impact : Élevé</span></div>
+<p>Les deux blocs actuels sont deux entités <code>Organization</code> qui partagent le même <code>@id</code> « undefined/catalog » : une variable non résolue dans le template. Les champs téléphone, adresse et zone desservie sont vides, et le logo pointe vers un favicon. Aucun type ne décrit la marque, la page, le fil d’Ariane, la liste des familles de produits ou la FAQ.</p>
+<div class="ba"><div class="bcol bad"><div class="blabel">Aujourd’hui (observé le 9 novembre 2026)</div><pre class="code"><code>{
+  &quot;@context&quot;: &quot;http://schema.org&quot;,
+  &quot;@type&quot;: &quot;Organization&quot;,
+  &quot;@id&quot;: &quot;undefined/catalog&quot;,
+  &quot;url&quot;: &quot;undefined/catalog&quot;,
+  &quot;brand&quot;: &quot;Sonepar&quot;,
+  &quot;areaServed&quot;: &quot;&quot;,
+  &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/scontent/images/themes/fra-connect/favicon.ico&quot;,
+  &quot;logo&quot;: &quot;https://fra-connect.mo.cloudinary.net/scontent/images/themes/fra-connect/favicon.ico&quot;,
+  &quot;telephone&quot;: &quot;&quot;,
+  &quot;address&quot;: {
+    &quot;@type&quot;: &quot;PostalAddress&quot;,
+    &quot;streetAddress&quot;: &quot;&quot;,
+    &quot;addressLocality&quot;: &quot;&quot;,
+    &quot;postalCode&quot;: &quot;&quot;,
+    &quot;addressCountry&quot;: &quot;&quot;
+  }
+}
+// + un 2e bloc Organization, même @id &quot;undefined/catalog&quot;</code></pre></div><div class="bcol good"><div class="blabel">Après SGEO</div><pre class="code"><code>{ &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@graph&quot;: [
+    Organization (Sonepar France) · WebSite · Organization (CARDI)
+    Brand (LIT by CARDI) · CollectionPage · BreadcrumbList
+    ItemList (11 familles) · ItemList (16 produits) · FAQPage
+  ] }
+// 13 Ko, voir le détail ci-dessous</code></pre></div></div>
+<details class="fold"><summary>Voir le JSON-LD complet injecté en mode SGEO ON (graphe de 9 entités)</summary><pre class="code"><code>{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@graph&quot;: [
+    {
+      &quot;@type&quot;: &quot;Organization&quot;,
+      &quot;@id&quot;: &quot;https://www.sonepar.fr/#organization&quot;,
+      &quot;name&quot;: &quot;Sonepar France&quot;,
+      &quot;url&quot;: &quot;https://www.sonepar.fr/&quot;,
+      &quot;logo&quot;: {
+        &quot;@type&quot;: &quot;ImageObject&quot;,
+        &quot;url&quot;: &quot;https://fra-connect.mo.cloudinary.net/scontent/images/themes/fra-connect/logo.svg&quot;
+      },
+      &quot;sameAs&quot;: [
+        &quot;https://www.facebook.com/GroupeSoneparFrance&quot;,
+        &quot;https://www.linkedin.com/company/sonepar-france/posts/?feedView=all&quot;,
+        &quot;https://www.youtube.com/@soneparfrance1905&quot;,
+        &quot;https://www.instagram.com/sonepar_fr/&quot;
+      ]
+    },
+    {
+      &quot;@type&quot;: &quot;WebSite&quot;,
+      &quot;@id&quot;: &quot;https://www.sonepar.fr/#website&quot;,
+      &quot;url&quot;: &quot;https://www.sonepar.fr/&quot;,
+      &quot;name&quot;: &quot;Sonepar.fr&quot;,
+      &quot;inLanguage&quot;: &quot;fr-FR&quot;,
+      &quot;publisher&quot;: {
+        &quot;@id&quot;: &quot;https://www.sonepar.fr/#organization&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Organization&quot;,
+      &quot;@id&quot;: &quot;https://www.sonepar.fr/#cardi&quot;,
+      &quot;name&quot;: &quot;CARDI&quot;,
+      &quot;brand&quot;: {
+        &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;Brand&quot;,
+      &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;,
+      &quot;name&quot;: &quot;LIT by CARDI&quot;,
+      &quot;alternateName&quot;: &quot;LIT by Cardi&quot;,
+      &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi&quot;,
+      &quot;logo&quot;: &quot;https://fra-connect.mo.cloudinary.net/BRAND/IMAGE/sonepar-fr/image/upload/logos/fabricants/07915.gif?ts=1741946552859&amp;type=bh32&quot;,
+      &quot;slogan&quot;: &quot;La marque 100% LED conçue pour simplifier l’éclairage&quot;,
+      &quot;description&quot;: &quot;LIT by CARDI est la marque 100% LED de CARDI, expert de l’éclairage professionnel depuis plus de 40 ans, distribuée en exclusivité par Sonepar.&quot;
+    },
+    {
+      &quot;@type&quot;: &quot;CollectionPage&quot;,
+      &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#webpage&quot;,
+      &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi&quot;,
+      &quot;name&quot;: &quot;LIT by CARDI : éclairage LED professionnel | Sonepar&quot;,
+      &quot;description&quot;: &quot;LIT by CARDI, la marque 100% LED de CARDI : panels, downlights, étanches, projecteurs, tubes et lampes. Catalogue 2026-2027 et gamme Ready Range.&quot;,
+      &quot;inLanguage&quot;: &quot;fr-FR&quot;,
+      &quot;isPartOf&quot;: {
+        &quot;@id&quot;: &quot;https://www.sonepar.fr/#website&quot;
+      },
+      &quot;about&quot;: {
+        &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+      },
+      &quot;breadcrumb&quot;: {
+        &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#breadcrumb&quot;
+      },
+      &quot;primaryImageOfPage&quot;: {
+        &quot;@type&quot;: &quot;ImageObject&quot;,
+        &quot;url&quot;: &quot;https://fra-connect.mo.cloudinary.net/scontent/caas/v1/media/116509456/data/7b9544532b7568c23657e19dc40c4620/7x2/1280/image-banni%C3%A8re-lit-by-cardi-landing.jpg&quot;
+      },
+      &quot;dateModified&quot;: &quot;2026-11-09&quot;,
+      &quot;mainEntity&quot;: {
+        &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#familles&quot;
+      }
+    },
+    {
+      &quot;@type&quot;: &quot;BreadcrumbList&quot;,
+      &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#breadcrumb&quot;,
+      &quot;itemListElement&quot;: [
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 1,
+          &quot;name&quot;: &quot;Accueil&quot;,
+          &quot;item&quot;: &quot;https://www.sonepar.fr/&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 2,
+          &quot;name&quot;: &quot;Marques&quot;,
+          &quot;item&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 3,
+          &quot;name&quot;: &quot;LIT by CARDI&quot;,
+          &quot;item&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi&quot;
+        }
+      ]
+    },
+    {
+      &quot;@type&quot;: &quot;ItemList&quot;,
+      &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#familles&quot;,
+      &quot;name&quot;: &quot;Familles de produits LIT by CARDI&quot;,
+      &quot;numberOfItems&quot;: 11,
+      &quot;itemListElement&quot;: [
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 1,
+          &quot;name&quot;: &quot;Armatures industrielles LIT by CARDI&quot;,
+          &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/category/SCC060301?filters=%7B%22brand%22%3A%5B%22LIT%20by%20Cardi%22%5D%7D&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 2,
+          &quot;name&quot;: &quot;Panels LIT by CARDI&quot;,
+          &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/category/panel-SCC060203?filters=%7B%22brand%22%3A%5B%22LIT%20by%20Cardi%22%5D%7D&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 3,
+          &quot;name&quot;: &quot;Downlights LIT by CARDI&quot;,
+          &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/category/SCC060207?filters=%7B%22brand%22%3A%5B%22LIT%20by%20Cardi%22%5D%7D&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 4,
+          &quot;name&quot;: &quot;Etanches LIT by CARDI&quot;,
+          &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/category/SCC060201?filters=%7B%22brand%22%3A%5B%22LIT%20by%20Cardi%22%5D%7D&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 5,
+          &quot;name&quot;: &quot;Hublots LIT by CARDI&quot;,
+          &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/category/SCC060208?filters=%7B%22brand%22%3A%5B%22LIT%20by%20Cardi%22%5D%7D&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 6,
+          &quot;name&quot;: &quot;Projecteurs extérieurs LIT by CARDI&quot;,
+          &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/category/SCC0601?filters=%7B%22brand%22%3A%5B%22LIT%20by%20Cardi%22%5D%7D&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 7,
+          &quot;name&quot;: &quot;Spots rail LIT by CARDI&quot;,
+          &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/category/SCC060406?filters=%7B%22brand%22%3A%5B%22LIT%20by%20Cardi%22%5D%7D&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 8,
+          &quot;name&quot;: &quot;Spots encastrés LIT by CARDI&quot;,
+          &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/category/SCC060401?filters=%7B%22brand%22%3A%5B%22LIT%20by%20Cardi%22%5D%7D&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 9,
+          &quot;name&quot;: &quot;Tubes LIT by CARDI&quot;,
+          &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/category/SCC060503?filters=%7B%22brand%22%3A%5B%22LIT%20by%20Cardi%22%5D%7D&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 10,
+          &quot;name&quot;: &quot;Réglettes LIT by CARDI&quot;,
+          &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/category/SCC060407?filters=%7B%22brand%22%3A%5B%22LIT%20by%20Cardi%22%5D%7D&quot;
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 11,
+          &quot;name&quot;: &quot;Lampes LIT by CARDI&quot;,
+          &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/category/SCC060502?filters=%7B%22brand%22%3A%5B%22LIT%20by%20Cardi%22%5D%7D&quot;
+        }
+      ]
+    },
+    {
+      &quot;@type&quot;: &quot;ItemList&quot;,
+      &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#selection&quot;,
+      &quot;name&quot;: &quot;Notre sélection LIT by CARDI&quot;,
+      &quot;numberOfItems&quot;: 16,
+      &quot;itemListElement&quot;: [
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 1,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;LAMPE LED E27 CLAIRE DIM TO WARM 7W 806lm 2200-2700K IRC80&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-lampe-led-e27-claire-dim-to-warm-7w-806lm-2200-2700k-irc80-07915841974&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/0019590107_2.jpg?ts=1792109450022&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915841974&quot;,
+            &quot;mpn&quot;: &quot;0019590107&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 2,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;LAMPE LED FLAMME E14 FILAMENT CLAIRE DIMMABLE 4,5W 470lm 2700K IRC80&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-lampe-led-flamme-e14-filament-claire-dimmable-4-5w-470lm-2700k-irc80-07915841977&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/0019590110__2.jpg?ts=1792109450087&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915841977&quot;,
+            &quot;mpn&quot;: &quot;0019590110&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 3,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;LAMPE LED GU10 DIMMABLE 2W 230lm 4000K GLASS IRC 80 36° 25000H 115lm/W&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-lampe-led-gu10-dimmable-2w-230lm-4000k-glass-irc-80-36-25000h-115lm-w-07915842041&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/V000058_0019590112-17.jpg?ts=1792109357732&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842041&quot;,
+            &quot;mpn&quot;: &quot;0019590114&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 4,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;SOLIS SPOT ORIENTABLE 4W 3CCT 30/40/65K 450lm 60° IP44 DIMMABLE BLANC&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-solis-spot-orientable-4w-3cct-30-40-65k-450lm-60-ip44-dimmable-blanc-07915842054&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/V000058_0017440229.jpg?ts=1792109444895&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842054&quot;,
+            &quot;mpn&quot;: &quot;0017440229&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 5,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;KAI SLIM DOWNLIGHT D221x19 mm 15-11.6-9.6W MULTFLUX 30/40K IP44 NNDIM&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-kai-slim-downlight-d221x19-mm-15-11-6-9-6w-multflux-30-40k-ip44-nndim-07915842066&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/V000058_0017440217-22.jpg?ts=1792109362611&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842066&quot;,
+            &quot;mpn&quot;: &quot;0017440226&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 6,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;DRY G3 - LUMINAIRE ETANCHE LED DETECTEUR 120 32W 4480 LM 4000K IP66 IK10 140LM/W&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-dry-g3-luminaire-etanche-led-detecteur-120-32w-4480-lm-4000k-ip66-ik10-140lm-w-07915842085&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/0028920283_1_Low_res_with_logo.jpg?ts=1792109450132&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842085&quot;,
+            &quot;mpn&quot;: &quot;0028920283&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 7,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;RUSKO LANTERNE SYM 3MTF CCT 33/41/48/58W,8200lm,3CCT 2200/3000/4000K&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-rusko-lanterne-sym-3mtf-cct-33-41-48-58w-8200lm-3cct-2200-3000-4000k-07915842099&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/v000130_0003010030.jpg?ts=1789162748508&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842099&quot;,
+            &quot;mpn&quot;: &quot;0003010030&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 8,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;STEN 32W 4000K UGR19 32W,4000K,3840lm,UGR19,RA80,avec driver&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-sten-32w-4000k-ugr19-32w-4000k-3840lm-ugr19-ra80-avec-driver-07915842100&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/0028920287_1_Low_with_logo.jpg?ts=1789162714124&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842100&quot;,
+            &quot;mpn&quot;: &quot;0028920287&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 9,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;KNUT PROJECTEUR CCT 3000/4000/6500K 50W 7000lm IP65&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-knut-projecteur-cct-3000-4000-6500k-50w-7000lm-ip65-07915842107&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/0017440239_1_Low_with_logo.jpg?ts=1789162733662&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842107&quot;,
+            &quot;mpn&quot;: &quot;0017440239&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 10,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;VIKTOR Tri-Proof 1.2m 43W 4000K 4300lm 100lm/W Marche/Arrêt Gris IP65&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-viktor-tri-proof-1-2m-43w-4000k-4300lm-100lm-w-marche-arret-gris-ip65-07915842111&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/0028920292_1_Low_with_logo.jpg?ts=1789162733696&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842111&quot;,
+            &quot;mpn&quot;: &quot;0028920292&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 11,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;VIKTOR Tri-Proof 1.5m 55W 4000K 5500lm 100lm/W Marche/Arrêt Gris IP65&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-viktor-tri-proof-1-5m-55w-4000k-5500lm-100lm-w-marche-arret-gris-ip65-07915842112&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/0028920293_1_Low_with_logo.jpg?ts=1789162733730&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842112&quot;,
+            &quot;mpn&quot;: &quot;0028920293&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 12,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;Edo,Downlight DALI,D170*59mm,10W,30/35/40K,1200lm,120lm/W,UGR&lt;19,Ra80,IP44F&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-edo-downlight-dali-d170-59mm-10w-30-35-40k-1200lm-120lm-w-ugr-19-ra80-ip44f-07915842118&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/0017440234___Low_with_logo.jpg?ts=1792109441813&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842118&quot;,
+            &quot;mpn&quot;: &quot;0017440234&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 13,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;Edo,Downlight DALI, D230*69mm,20W,30/35/40K,2400lm,120lm/W,UGR&lt;19,Ra80,IP44F&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-edo-downlight-dali-d230-69mm-20w-30-35-40k-2400lm-120lm-w-ugr-19-ra80-ip44f-07915842119&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/0017440235__Low_with_logo.jpg?ts=1792109441843&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842119&quot;,
+            &quot;mpn&quot;: &quot;0017440235&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 14,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;ERIK 18/12/9W,2160/1440/1080lm,120lm/W,3CCT 3000K/4000K/6500K,IP65&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-erik-18-12-9w-2160-1440-1080lm-120lm-w-3cct-3000k-4000k-6500k-ip65-07915842129&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/0028920289_1_Low_with_logo.jpg?ts=1792109367734&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842129&quot;,
+            &quot;mpn&quot;: &quot;0028920289&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 15,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;T8 G13 Verre,1.2M,18W,4000K FERRO 1850lm RA80 Non-dimmable&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-t8-g13-verre-1-2m-18w-4000k-ferro-1850lm-ra80-non-dimmable-07915842135&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/0019590124_1_Low_with_logo.jpg?ts=1792109450252&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842135&quot;,
+            &quot;mpn&quot;: &quot;0019590124&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;ListItem&quot;,
+          &quot;position&quot;: 16,
+          &quot;item&quot;: {
+            &quot;@type&quot;: &quot;Product&quot;,
+            &quot;name&quot;: &quot;BEKK REGLETTE MTF 19-39W 1200MM CCT 3000/4000K IP44&quot;,
+            &quot;url&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/products/lit-by-cardi-bekk-reglette-mtf-19-39w-1200mm-cct-3000-4000k-ip44-07915842143&quot;,
+            &quot;image&quot;: &quot;https://fra-connect.mo.cloudinary.net/PRODUCT/IMAGE/7915/v000204_0028920315_17.jpg?ts=1789162748765&amp;type=medium&quot;,
+            &quot;sku&quot;: &quot;07915842143&quot;,
+            &quot;mpn&quot;: &quot;0028920316&quot;,
+            &quot;brand&quot;: {
+              &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#brand&quot;
+            }
+          }
+        }
+      ]
+    },
+    {
+      &quot;@type&quot;: &quot;FAQPage&quot;,
+      &quot;@id&quot;: &quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi#faq&quot;,
+      &quot;mainEntity&quot;: [
+        {
+          &quot;@type&quot;: &quot;Question&quot;,
+          &quot;name&quot;: &quot;Qu’est-ce que LIT by CARDI ?&quot;,
+          &quot;acceptedAnswer&quot;: {
+            &quot;@type&quot;: &quot;Answer&quot;,
+            &quot;text&quot;: &quot;LIT by CARDI est la marque 100% LED de CARDI, expert de l’éclairage professionnel depuis plus de 40 ans. Elle propose une gamme complète de solutions d’éclairage conçue pour répondre aux exigences des environnements professionnels les plus variés, et elle est distribuée en exclusivité par Sonepar.&quot;
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;Question&quot;,
+          &quot;name&quot;: &quot;Quelles familles de produits LIT by CARDI propose-t-elle ?&quot;,
+          &quot;acceptedAnswer&quot;: {
+            &quot;@type&quot;: &quot;Answer&quot;,
+            &quot;text&quot;: &quot;La gamme couvre 11 familles : armatures industrielles, panels, downlights, étanches, hublots, projecteurs extérieurs, spots rail, spots encastrés, tubes, réglettes et lampes.&quot;
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;Question&quot;,
+          &quot;name&quot;: &quot;Qu’est-ce que la gamme Ready Range ?&quot;,
+          &quot;acceptedAnswer&quot;: {
+            &quot;@type&quot;: &quot;Answer&quot;,
+            &quot;text&quot;: &quot;La Ready Range regroupe les nouveaux produits éco de LIT by CARDI : elle permet de s’équiper à bas coût en panels, étanches, downlights, spots, hublots et projecteurs.&quot;
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;Question&quot;,
+          &quot;name&quot;: &quot;Quelles sont les nouveautés LIT by CARDI 2026-2027 ?&quot;,
+          &quot;acceptedAnswer&quot;: {
+            &quot;@type&quot;: &quot;Answer&quot;,
+            &quot;text&quot;: &quot;LIT by CARDI annonce plus de 20 nouveautés et évolutions produits sur l’éclairage pour 2026-2027, à retrouver dans le catalogue en ligne. Les nouveaux panels, étanches et downlights font l’objet d’une page dédiée.&quot;
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;Question&quot;,
+          &quot;name&quot;: &quot;Comment remplacer des tubes fluorescents par du LED ?&quot;,
+          &quot;acceptedAnswer&quot;: {
+            &quot;@type&quot;: &quot;Answer&quot;,
+            &quot;text&quot;: &quot;LIT by CARDI propose un convertisseur LED pour remplacer ses tubes fluorescents en quelques clics, ainsi qu’une gamme de tubes LED T8, dont un tube de 1,2 m, 18 W, en 4000 K.&quot;
+          }
+        },
+        {
+          &quot;@type&quot;: &quot;Question&quot;,
+          &quot;name&quot;: &quot;Où acheter les produits LIT by CARDI ?&quot;,
+          &quot;acceptedAnswer&quot;: {
+            &quot;@type&quot;: &quot;Answer&quot;,
+            &quot;text&quot;: &quot;Les produits LIT by CARDI sont disponibles sur Sonepar.fr, qui compte plus de 1,5 million de références, avec une livraison adaptée à vos besoins et des conseils d’experts pour accompagner vos projets.&quot;
+          }
+        }
+      ]
+    }
+  ]
+}</code></pre></details>
+<ul class="clean"><li><b>Organization / WebSite</b> : une seule entité Sonepar, avec <code>sameAs</code> vers les 4 réseaux sociaux déjà présents sur la page.</li>
+<li><b>Brand + Organization CARDI</b> : relie la marque LIT by CARDI à son fabricant, avec l’orthographe unique « LIT by CARDI » (la variante « Cardi » reste en <code>alternateName</code>).</li>
+<li><b>CollectionPage + BreadcrumbList</b> : décrit la page marque et son chemin Accueil, Marques, LIT by CARDI.</li>
+<li><b>ItemList</b> (11 familles, 16 produits) et <b>FAQPage</b> : rendent la structure du catalogue lisible sans exécuter la page.</li></ul>
+<div class="note"><b>À savoir.</b> Depuis 2023, Google réserve l’affichage enrichi des FAQ à quelques sites institutionnels : le balisage <code>FAQPage</code> sert ici surtout à la compréhension par les moteurs et les LLM, pas à obtenir des rich results. Les <code>Product</code> sont volontairement sans <code>offers</code> tant que prix et disponibilité (liés au compte client) ne sont pas exposés. Un <code>VideoObject</code> pour la vidéo YouTube de la page demande une date de mise en ligne et une description que nous n’avons pas : à ajouter avec les données de la marque.</div>
+<div class="why"><b>Contrôle.</b> Valider avec le Schema Markup Validator et le test des résultats enrichis, puis suivre les erreurs dans la Search Console (rapport « Améliorations »).</div>
+
+<h2 id="urls">3. URL et redirections</h2>
+<div class="chips"><span class="chip where">Cloudflare + Next.js</span><span class="chip">Qui : Dev</span><span class="chip">Effort : 1 j</span><span class="chip imp-h">Impact : Élevé</span></div>
+<p>L’URL actuelle contient des espaces encodés et des majuscules : <code>/brand/LIT%20by%20Cardi</code>. Nous avons testé quatre variantes (<code>lit-by-cardi</code>, <code>lit%20by%20cardi</code>, <code>LIT-by-Cardi</code>, <code>LIT+by+Cardi</code>) : les quatre répondent <b>200</b> sans redirection, et chacune déclare sa propre URL en canonical. Cela crée des doublons de la même page. Par ailleurs, les liens de la page vers les catégories passent par une redirection 308 (<code>panel-SCC060203</code> devient <code>dalle-led-SCC060203</code>) et le filtre de marque change d’écriture (<code>LIT%20by%20Cardi</code> devient <code>LIT+by+Cardi</code>).</p>
+<div class="single"><pre class="code"><code># Cloudflare : règle de redirection (expression)
+(http.request.uri.path matches &quot;^/catalog/fr-fr/brand/.+&quot;)
+  and (http.request.uri.path ne lower(http.request.uri.path)
+       or http.request.uri.path contains &quot;%20&quot; or http.request.uri.path contains &quot;+&quot;)
+-&gt; 301 vers concat(&quot;/catalog/fr-fr/brand/&quot;, slug(brand))   # lit-by-cardi
+
+# Next.js : middleware.ts (équivalent applicatif)
+export function middleware(req: NextRequest) {
+  const m = req.nextUrl.pathname.match(/^\/catalog\/(fr-fr)\/brand\/(.+)$/i);
+  if (!m) return;
+  const slug = decodeURIComponent(m[2]).toLowerCase().replace(/[\s+]+/g, &#x27;-&#x27;);
+  if (slug !== m[2]) {
+    const url = req.nextUrl.clone();
+    url.pathname = `/catalog/${m[1]}/brand/${slug}`;
+    return NextResponse.redirect(url, 301);
+  }
+}</code></pre></div>
+<ul class="clean"><li>Choisir <code>/catalog/fr-fr/brand/lit-by-cardi</code> comme URL unique, puis 301 depuis toutes les variantes.</li>
+<li>Mettre à jour les liens internes, le sitemap et le canonical pour qu’ils pointent directement vers l’URL finale, sans passer par un 308.</li>
+<li>Les pages catégorie filtrées par marque ont un canonical vers la catégorie sans filtre : prévoir, si l’on veut positionner « panels LIT by CARDI », des pages marque + famille indexables.</li></ul>
+
+<h2 id="robots">4. robots.txt et robots IA</h2>
+<div class="chips"><span class="chip where">Racine du domaine</span><span class="chip">Qui : SEO + Juridique</span><span class="chip">Effort : 0,5 j</span><span class="chip imp-m">Impact : Moyen</span></div>
+<p>Le fichier actuel autorise tout sauf quelques chemins techniques, et ne dit rien des robots des moteurs de réponse IA. Il déclare bien un sitemap.</p>
+<div class="ba"><div class="bcol bad"><div class="blabel">Aujourd’hui (observé le 9 novembre 2026)</div><pre class="code"><code>User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /api
+Disallow: /graphql
+Disallow: /catalog/*/catalog/*/category
+
+Sitemap: https://www.sonepar.fr/sitemap.xml</code></pre></div><div class="bcol good"><div class="blabel">Après SGEO</div><pre class="code"><code># Règles historiques conservées pour tous les robots
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /api
+Disallow: /graphql
+Disallow: /catalog/*/catalog/*/category
+
+# Moteurs de réponse IA : recherche et citation en direct (autoriser)
+# Un groupe nommé remplace le groupe &quot;*&quot; : les Disallow sont donc répétés.
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+Allow: /
+Disallow: /checkout
+Disallow: /api
+Disallow: /graphql
+Disallow: /catalog/*/catalog/*/category
+
+# Entraînement des modèles : décision business et juridique à valider
+# Option A (restrictive) ; l&#x27;option B consiste à remplacer &quot;Disallow: /&quot; par &quot;Allow: /&quot;
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: CCBot
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+Disallow: /
+
+Sitemap: https://www.sonepar.fr/sitemap.xml
+Sitemap: https://www.sonepar.fr/sitemap/brand/sitemap_brands.xml</code></pre></div></div>
+<div class="why"><b>Pourquoi un groupe par robot.</b> Il faut distinguer les robots qui <i>citent en direct</i> (OAI-SearchBot, ChatGPT-User, PerplexityBot, Claude-SearchBot, Claude-User), que l’on veut généralement laisser entrer, de ceux qui <i>entraînent</i> des modèles (GPTBot, ClaudeBot, CCBot, Google-Extended, Applebot-Extended), sujet de décision business et juridique.</div>
+<div class="note"><b>Attention.</b> Ce fichier est à la racine de Sonepar.fr : toute modification s’applique à l’ensemble du site, pas seulement à la page marque. La gouvernance (équipe SEO centrale, juridique) doit valider avant mise en ligne. Les noms de robots évoluent : revérifier la liste officielle de chaque éditeur avant déploiement.</div>
+
+<h2 id="llms">5. llms.txt</h2>
+<div class="chips"><span class="chip where">Racine du domaine</span><span class="chip">Qui : SEO + Dev</span><span class="chip">Effort : 0,5 à 1 j</span><span class="chip imp-m">Impact : Moyen</span></div>
+<p>Aujourd’hui <code>/llms.txt</code> répond 404 (avec une page d’erreur de 518 Ko). Le fichier proposé suit la convention llmstxt.org : un titre, un résumé, puis des listes de liens commentés vers les pages utiles. Il n’utilise que des URL qui existent déjà.</p>
+<div class="single"><pre class="code"><code># Sonepar.fr : marques en ligne, LIT by CARDI
+
+&gt; Sonepar.fr est le catalogue en ligne de Sonepar France : plus de 1,5 million de références, une livraison adaptée aux besoins des professionnels et des conseils d&#x27;experts. LIT by CARDI est la marque 100% LED de CARDI, expert de l&#x27;éclairage professionnel depuis plus de 40 ans, distribuée en exclusivité par Sonepar.
+
+Les pages ci-dessous décrivent la marque LIT by CARDI, ses 11 familles de produits, ses nouveautés 2026-2027 et la gamme Ready Range. Les prix et la disponibilité dépendent du compte client et de l&#x27;agence : ils ne figurent pas dans ce fichier.
+
+## LIT by CARDI
+- [LIT by CARDI : éclairage LED professionnel](https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi): page marque, familles de produits, sélection, questions fréquentes
+- [Catalogue LIT by CARDI 2026-2027](https://lit-cardi2027.media.sonepar.fr/): plus de 20 nouveautés et évolutions produits éclairage
+- [Gamme Ready Range](https://www.sonepar.fr/fr-fr/static/ready-range-lit-by-cardi): panels, étanches, downlights, spots, hublots et projecteurs à bas coût
+- [Convertisseur LED](https://www.sonepar.fr/fr-fr/static/convertisseur-led-lit-by-cardi): remplacer des tubes fluorescents par du LED
+- [Nouveaux panels, étanches et downlights](https://www.sonepar.fr/fr-fr/static/nouveautes-eclairage-panel-etanche-lit): nouveautés de la gamme
+
+## Familles de produits LIT by CARDI
+- [Armatures industrielles LIT by CARDI](https://www.sonepar.fr/catalog/fr-fr/category/SCC060301)
+- [Panels LIT by CARDI](https://www.sonepar.fr/catalog/fr-fr/category/dalle-led-SCC060203)
+- [Downlights LIT by CARDI](https://www.sonepar.fr/catalog/fr-fr/category/SCC060207)
+- [Etanches LIT by CARDI](https://www.sonepar.fr/catalog/fr-fr/category/SCC060201)
+- [Hublots LIT by CARDI](https://www.sonepar.fr/catalog/fr-fr/category/SCC060208)
+- [Projecteurs extérieurs LIT by CARDI](https://www.sonepar.fr/catalog/fr-fr/category/SCC0601)
+- [Spots rail LIT by CARDI](https://www.sonepar.fr/catalog/fr-fr/category/SCC060406)
+- [Spots encastrés LIT by CARDI](https://www.sonepar.fr/catalog/fr-fr/category/SCC060401)
+- [Tubes LIT by CARDI](https://www.sonepar.fr/catalog/fr-fr/category/SCC060503)
+- [Réglettes LIT by CARDI](https://www.sonepar.fr/catalog/fr-fr/category/SCC060407)
+- [Lampes LIT by CARDI](https://www.sonepar.fr/catalog/fr-fr/category/SCC060502)
+
+## Informations pratiques
+- [Vos questions fréquentes](https://www.sonepar.fr/fr-fr/static/vos-questions-frequentes)
+- [Politique de retour](https://www.sonepar.fr/fr-fr/static/politique-de-retour-sonepar)
+- [Conditions de garantie des marques distributeur](https://www.sonepar.fr/fr-fr/static/conditions-de-la-garantie-commerciale)
+- [Réglementation REACH et RoHS](https://www.sonepar.fr/fr-fr/static/reglementation-reach-rohs)
+
+## Optional
+- [Toutes les marques Sonepar](https://www.sonepar.fr/catalog/fr-fr/brand)
+- [Plan du site : catégories](https://www.sonepar.fr/catalog/fr-fr/category)</code></pre></div>
+<div class="note"><b>Réalisme.</b> llms.txt est une proposition de la communauté, pas un standard officiel, et les grands moteurs n’ont pas confirmé s’en servir comme signal de classement. Son coût est très faible et il aide les agents et les outils qui le consultent. En complément, une version Markdown de chaque page marque (<code>/catalog/fr-fr/brand/lit-by-cardi.md</code>) facilite la lecture par les agents.</div>
+
+<h2 id="sitemap">6. Sitemaps et indexation</h2>
+<div class="chips"><span class="chip where">Génération de sitemaps</span><span class="chip">Qui : Dev</span><span class="chip">Effort : 1 j</span><span class="chip imp-m">Impact : Moyen</span></div>
+<p>L’index <code>sitemap.xml</code> référence 3 sitemaps : catégories (735 URL), pages statiques (475 URL) et produits (47 sous-sitemaps). <b>Aucune page <code>/catalog/fr-fr/brand/…</code> n’y figure</b> : les pages marque ne sont donc découvertes que par les liens. Les pages marque Cooper, Xelan ou Sogaine sont, elles, des pages statiques référencées.</p>
+<div class="single"><pre class="code"><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;urlset xmlns=&quot;http://www.sitemaps.org/schemas/sitemap/0.9&quot;
+        xmlns:xhtml=&quot;http://www.w3.org/1999/xhtml&quot;
+        xmlns:image=&quot;http://www.google.com/schemas/sitemap-image/1.1&quot;&gt;
+  &lt;url&gt;
+    &lt;loc&gt;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi&lt;/loc&gt;
+    &lt;lastmod&gt;2026-11-09&lt;/lastmod&gt;
+    &lt;xhtml:link rel=&quot;alternate&quot; hreflang=&quot;fr-fr&quot; href=&quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi&quot;/&gt;
+    &lt;xhtml:link rel=&quot;alternate&quot; hreflang=&quot;x-default&quot; href=&quot;https://www.sonepar.fr/catalog/fr-fr/brand/lit-by-cardi&quot;/&gt;
+    &lt;image:image&gt;&lt;image:loc&gt;https://fra-connect.mo.cloudinary.net/scontent/caas/v1/media/116509456/data/7b9544532b7568c23657e19dc40c4620/7x2/1280/image-banni%C3%A8re-lit-by-cardi-landing.jpg&lt;/image:loc&gt;
+      &lt;image:title&gt;LIT by CARDI : éclairage LED professionnel&lt;/image:title&gt;&lt;/image:image&gt;
+  &lt;/url&gt;
+  &lt;!-- une entrée par marque : Excel Networking, TRADEFORCE, Mayflex… --&gt;
+&lt;/urlset&gt;</code></pre></div>
+<ul class="clean"><li>Ajouter ce sitemap à l’index et à <code>robots.txt</code>, avec un <code>lastmod</code> réel (date de modification du contenu, pas de la génération).</li>
+<li>Déclarer les alternates <code>hreflang</code> dans le sitemap dès qu’une autre langue existe.</li>
+<li>Notifier les changements via <b>IndexNow</b> (Bing et partenaires) à chaque publication : utile car plusieurs assistants IA s’appuient sur l’index de Bing.</li>
+<li>Soumettre le sitemap dans la Search Console et Bing Webmaster Tools, puis surveiller l’indexation de la page marque.</li></ul>
+
+<h2 id="http">7. En-têtes HTTP et cache</h2>
+<div class="chips"><span class="chip where">Cloudflare + serveur</span><span class="chip">Qui : Dev / Infra</span><span class="chip">Effort : 1 à 2 j</span><span class="chip imp-h">Impact : Élevé</span></div>
+<p>La page est servie en <code>no-store</code>, donc jamais mise en cache par Cloudflare (<code>DYNAMIC</code>), et chaque réponse HTML pose des cookies. Les robots, y compris ceux des IA qui n’attendent pas longtemps, subissent le temps de rendu complet à chaque visite.</p>
+<div class="ba"><div class="bcol bad"><div class="blabel">Aujourd’hui (observé le 9 novembre 2026)</div><pre class="code"><code>HTTP/2 200
+content-type: text/html; charset=utf-8
+content-encoding: br
+cache-control: private, no-cache, no-store, max-age=0, must-revalidate
+set-cookie: unleash-session-id=…; Path=/
+set-cookie: dtCookie…=…; Path=/; Domain=.sonepar.fr
+cf-cache-status: DYNAMIC
+server: cloudflare</code></pre></div><div class="bcol good"><div class="blabel">Après SGEO</div><pre class="code"><code>HTTP/2 200
+content-type: text/html; charset=utf-8
+content-encoding: br
+cache-control: public, s-maxage=600, stale-while-revalidate=86400
+cf-cache-status: HIT                      # pour les visiteurs anonymes et les robots
+link: &lt;hero-1280.jpg&gt;; rel=preload; as=image; fetchpriority=high
+# plus de Set-Cookie sur le HTML anonyme (le cookie est posé côté client si nécessaire)
+vary: Accept-Encoding</code></pre></div></div>
+<div class="why"><b>Pourquoi pour le SGEO.</b> Les robots IA ont des délais courts et ne rejouent pas une page lente. Un HTML servi depuis le cache de bord est lu plus vite et plus souvent. À réserver aux visiteurs anonymes : les pages avec prix ou compte client restent privées.</div>
+
+<h2 id="perf">8. Performance et rendu</h2>
+<div class="chips"><span class="chip where">Template + CMS</span><span class="chip">Qui : Dev</span><span class="chip">Effort : 2 à 3 j</span><span class="chip imp-m">Impact : Moyen</span></div>
+<ul class="clean"><li><b>Rendu serveur : correct.</b> Le contenu est dans le HTML initial, ce que lisent les robots sans exécuter de JavaScript. Point fort à préserver.</li>
+<li><b>Poids du HTML.</b> 796 Ko bruts (135 Ko en brotli), dont 708 Ko de <code>__NEXT_DATA__</code> (89 %). Réduire les <code>pageProps</code> aux champs réellement utilisés par la page.</li>
+<li><b>Image hero en <code>loading="lazy"</code>.</b> C’est l’élément le plus grand de l’écran (LCP) : passer en <code>loading="eager"</code> avec <code>fetchpriority="high"</code> et un <code>preload</code>. Le mode SGEO ON applique ce changement.</li>
+<li><b>Ressources.</b> 8 feuilles CSS (environ 625 Ko non compressés) et 33 scripts : regrouper et différer l’inutile.</li>
+<li><b>Logo marque en GIF.</b> Passer en SVG ou WebP.</li>
+<li><b>Page 404.</b> 518 Ko pour une erreur : à alléger.</li></ul>
+<div class="note">Les Core Web Vitals réels n’ont pas pu être mesurés ici (quota de l’API PageSpeed dépassé). Les points ci-dessus viennent de l’analyse du code. À confirmer avec les données terrain de la Search Console.</div>
+
+<h2 id="alt">9. Alt, hiérarchie des titres et maillage</h2>
+<div class="chips"><span class="chip where">CMS + template</span><span class="chip">Qui : Contenu + Dev</span><span class="chip">Effort : 1 j</span><span class="chip imp-m">Impact : Moyen</span></div>
+<p>Sur 21 images, 4 ont un alt vide et 13 ont un alt technique : noms de fichiers ou mots anglais bruts. Le seul alt soigné est celui des réglettes.</p>
+<table class="tbl"><thead><tr><th>Alt actuel</th><th>Alt proposé</th></tr></thead><tbody><tr><td><code>0017160027-A1-Hi</code></td><td>Armature industrielle LED LIT by CARDI</td></tr><tr><td><code>LIT-Panel-6x6</code></td><td>Panel LED LIT by CARDI</td></tr><tr><td><code>downlight</code></td><td>Downlight LED LIT by CARDI</td></tr><tr><td><code>LIT-Batten</code></td><td>Luminaire étanche LED LIT by CARDI</td></tr><tr><td><code>LIT-Ceiling-Bulkhead-2</code></td><td>Hublot LED LIT by CARDI</td></tr><tr><td><code>Flood Light-1</code></td><td>Projecteur extérieur LED LIT by CARDI</td></tr><tr><td><code>spot</code></td><td>Spot sur rail LED LIT by CARDI</td></tr><tr><td><code>0017440110_1_Low</code></td><td>Spot encastré LED LIT by CARDI</td></tr><tr><td><code>0019590013-Hi</code></td><td>Tube LED LIT by CARDI</td></tr><tr><td><code>LIT-Bulb</code></td><td>Lampe LED LIT by CARDI</td></tr><tr><td><code>4-3_1million-references</code></td><td>(vide : icône décorative, le texte voisin porte le sens)</td></tr><tr><td><code>(vide) bannière hero</code></td><td>Éclairage LED professionnel LIT by CARDI : bureaux, parking et site industriel</td></tr><tr><td><code>(vide) visuel catalogue</code></td><td>Catalogue LIT by CARDI 2026-2027 : plus de 20 nouveautés éclairage</td></tr></tbody></table>
+<ul class="clean"><li><b>Titres.</b> H1 « LIT by Cardi » sans descripteur ; H2 « Nos catégories: » avec deux-points ; l’accroche « La marque 100% LED… » est un simple paragraphe répété deux fois sur la page (en-tête et bloc texte). Le mode SGEO ON la transforme en H2 et réécrit l’en-tête en réponse directe.</li>
+<li><b>Nom de marque.</b> « LIT by Cardi » et « CARDI » cohabitent. Harmoniser en « LIT by CARDI » partout (titres, alt, JSON-LD).</li>
+<li><b>Liens.</b> Les libellés « Je consulte le catalogue » et « Je découvre la gamme » ne disent rien hors contexte : ils deviennent « Consulter le catalogue LIT by CARDI 2026-2027 » et « Découvrir la gamme Ready Range LIT by CARDI ».</li>
+<li><b>Fil d’Ariane.</b> Ajouter « Accueil » en tête, avec le BreadcrumbList correspondant.</li></ul>
+
+<h2 id="produit">10. Données produit</h2>
+<div class="chips"><span class="chip where">PIM + template</span><span class="chip">Qui : Produit + Dev</span><span class="chip">Effort : Continu</span><span class="chip imp-h">Impact : Élevé</span></div>
+<p>Les 16 produits du carousel « Notre sélection » n’apparaissent qu’après exécution du JavaScript : le HTML serveur n’en contient aucun. Pour qu’un assistant réponde à « quel hublot LED IP65 de marque LIT by CARDI ? », les fiches produit doivent exposer des attributs lisibles par une machine, en plus de la photo.</p>
+<ul class="clean"><li>Attributs techniques en champs structurés : puissance, flux (lm), température de couleur (K), IRC, indice de protection (IP, IK), UGR, protocole de gradation, dimensions, EAN.</li>
+<li>Fiches techniques PDF avec texte sélectionnable, et lien vers la fiche depuis chaque produit.</li>
+<li>Descriptions courtes uniques par produit, et déclinaisons regroupées (même gamme, plusieurs puissances).</li>
+<li>Rendre le carousel « Notre sélection » côté serveur (nom, références, lien vers la fiche), et publier un ItemList JSON-LD avec url, sku, mpn et image réels, comme dans le comparateur (SGEO ON).</li>
+<li>Compléter les aria-label des flèches (« En savoir plus sur : » est tronqué) avec le nom du produit.</li></ul>
+
+<h2 id="entite">11. Entité et autorité hors site</h2>
+<div class="chips"><span class="chip where">Hors site</span><span class="chip">Qui : SEO + Marque</span><span class="chip">Effort : Continu</span><span class="chip imp-m">Impact : Moyen</span></div>
+<ul class="clean"><li><b>Wikidata</b> : créer ou compléter les éléments LIT by CARDI et CARDI, puis les relier par <code>sameAs</code> dans le JSON-LD.</li>
+<li><b>Vidéo YouTube de la page</b> : ajouter transcription, chapitres et description complète ; la reprendre en texte sur la page.</li>
+<li><b>Mentions et annuaires</b> : fiche sur les annuaires professionnels de l’éclairage, presse spécialisée, retours de prescripteurs. Les moteurs IA citent surtout des sources tierces.</li>
+<li><b>Cohérence</b> : même nom de marque, même description et mêmes liens sur Sonepar.fr, le site de la marque et les réseaux sociaux.</li></ul>
+
+<h2 id="mesure">12. Mesure et suivi</h2>
+<div class="chips"><span class="chip where">Analytics + logs</span><span class="chip">Qui : SEO + Data</span><span class="chip">Effort : 1 j puis mensuel</span><span class="chip imp-h">Impact : Élevé</span></div>
+<ul class="clean"><li><b>Logs serveur</b> : suivre les visites par robot (OAI-SearchBot, PerplexityBot, Claude-SearchBot, Googlebot…) et les codes de réponse.</li>
+<li><b>Analytics</b> : isoler les visites provenant d’assistants IA (référents <code>chatgpt.com</code>, <code>perplexity.ai</code>, <code>gemini.google.com</code>, <code>copilot.microsoft.com</code>).</li>
+<li><b>Panel de prompts</b> : 30 à 50 questions types (« meilleur fabricant de dalles LED », « remplacer un tube fluorescent par du LED »…) testées chaque mois sur plusieurs assistants, avec taux de citation, position et exactitude des faits.</li>
+<li><b>Search Console et Bing Webmaster</b> : impressions et clics sur les requêtes de marque, indexation, erreurs de données structurées.</li></ul>
+
+<h2 id="plan">Plan de déploiement</h2>
+<div class="plan"><div><h3>Semaine 1 : fondations</h3><ul class="clean"><li>Titre, description, robots, Open Graph</li><li>Correction du JSON-LD « undefined »</li><li>Hero prioritaire, alt, libellés de liens</li><li>Mise en place des logs et de la mesure de référence</li></ul></div>
+<div><h3>Mois 1 : structure</h3><ul class="clean"><li>URL unique et 301</li><li>Graphe JSON-LD complet, FAQ</li><li>Sitemap marques, IndexNow</li><li>robots.txt par robot IA, llms.txt</li></ul></div>
+<div><h3>Trimestre : profondeur</h3><ul class="clean"><li>Cache CDN anonyme, allègement de <code>__NEXT_DATA__</code></li><li>Attributs produit structurés</li><li>Wikidata, vidéo transcrite, mentions externes</li><li>Panel de prompts mensuel et ajustements</li></ul></div></div>
+
+<h2 id="hypotheses">Limites et hypothèses</h2>
+<ul class="clean"><li>Le contenu ajouté (chiffres clés, FAQ, descriptions) reprend uniquement des faits présents sur la page Sonepar ou dans la maquette Immersive Garden. Garantie, certifications et performances chiffrées ne sont pas inventées : elles restent à fournir par CARDI et Sonepar.</li>
+<li>La mention « distribuée en exclusivité par Sonepar » est reprise du brief et à confirmer avec le client avant publication.</li>
+<li>La date « novembre 2026 » et le <code>dateModified</code> sont indicatifs : ils doivent suivre la vraie date de modification.</li>
+<li>Le comparateur injecte les balises du head en JavaScript pour la démonstration. En production, elles sont rendues côté serveur.</li>
+<li>Hors périmètre SGEO, à signaler à l’équipe concernée : la configuration Dynatrace de la page référence l’identifiant et l’e-mail de l’utilisateur connecté comme métadonnées de session, point à faire vérifier par le DPO.</li></ul>
+</main></div></body></html>
