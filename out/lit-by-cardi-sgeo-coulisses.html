@@ -30,7 +30,27 @@ details.fold{border:1px solid var(--line);border-radius:10px;margin:12px 0}detai
 ul.clean{padding-left:20px}ul.clean li{margin:4px 0}
 .plan{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.plan>div{border:1px solid var(--line);border-radius:10px;padding:14px 16px}.plan h3{margin-top:0}
 @media(max-width:980px){.layout{grid-template-columns:1fr}nav.toc{display:none}.ba,.plan{grid-template-columns:1fr}}
-</style></head><body>
+#access-gate{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:24px;background:#f7f8fa}
+#access-gate[hidden]{display:none}
+#access-gate .gate-card{width:min(100%,420px);padding:36px;border:1px solid #e3e6ea;border-radius:18px;background:#fff;box-shadow:0 18px 60px rgba(20,24,31,.12)}
+#access-gate h1{font-size:24px;margin:0 0 8px}
+#access-gate p{margin:0 0 22px;color:#5b6472}
+#access-gate label{display:block;margin-bottom:7px;font-weight:600}
+#access-gate input{width:100%;padding:12px 14px;border:1px solid #cbd2dc;border-radius:8px;font:inherit}
+#access-gate button{width:100%;margin-top:14px;padding:12px;border:0;border-radius:8px;background:#1f3a8a;color:white;font:inherit;font-weight:600;cursor:pointer}
+#access-gate [role=status]{min-height:24px;margin:10px 0 0;color:#b91c1c;font-size:13px}
+body.locked> :not(#access-gate){visibility:hidden!important}
+</style></head><body class="locked">
+<section id="access-gate" aria-labelledby="gate-title">
+  <form class="gate-card" id="access-form">
+    <h1 id="gate-title">Page protégée</h1>
+    <p>Saisis le mot de passe pour consulter les coulisses SGEO.</p>
+    <label for="gate-password">Mot de passe</label>
+    <input id="gate-password" type="password" autocomplete="current-password" required autofocus>
+    <button type="submit">Accéder à la page</button>
+    <p role="status" id="gate-error" aria-live="polite"></p>
+  </form>
+</section>
 <header class="top"><strong>Coulisses SGEO</strong><span class="mut">LIT by CARDI sur Sonepar.fr</span><a class="back" href="lit-by-cardi-sgeo-comparateur.html#sgeo=1&assets=1">← Comparateur avant / après</a></header>
 <div class="layout">
 <nav class="toc"><b>Sommaire</b>
@@ -784,4 +804,26 @@ vary: Accept-Encoding</code></pre></div></div>
 <li>La date « novembre 2026 » et le <code>dateModified</code> sont indicatifs : ils doivent suivre la vraie date de modification.</li>
 <li>Le comparateur injecte les balises du head en JavaScript pour la démonstration. En production, elles sont rendues côté serveur.</li>
 <li>Hors périmètre SGEO, à signaler à l’équipe concernée : la configuration Dynatrace de la page référence l’identifiant et l’e-mail de l’utilisateur connecté comme métadonnées de session, point à faire vérifier par le DPO.</li></ul>
-</main></div></body></html>
+</main></div>
+<script>
+(function(){
+  var gateKey='sgeo-coulisses-access';
+  var gate=document.getElementById('access-gate');
+  if(sessionStorage.getItem(gateKey)==='ok'){
+    document.body.classList.remove('locked');
+    gate.hidden=true;
+  }
+  document.getElementById('access-form').addEventListener('submit',function(event){
+    event.preventDefault();
+    var password=document.getElementById('gate-password').value;
+    if(password==='coulisses2026'){
+      sessionStorage.setItem(gateKey,'ok');
+      document.body.classList.remove('locked');
+      gate.hidden=true;
+      return;
+    }
+    document.getElementById('gate-error').textContent='Mot de passe incorrect.';
+    document.getElementById('gate-password').select();
+  });
+})();
+</script></body></html>
