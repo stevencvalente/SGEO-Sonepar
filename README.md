@@ -1,5 +1,5 @@
-# LIT by Cardi — comparateur SGEO
+# LIT by CARDI — comparateur SGEO
 
-Page HTML autonome du comparateur LIT by Cardi pour Sonepar France, avec le visuel animé de la gamme Ready Range.
+La dernière version du comparateur est dans [out/lit-by-cardi-sgeo-comparateur.html](out/lit-by-cardi-sgeo-comparateur.html). Ses vidéos sont conservées dans `assets/`, à côté du dossier `out/`, comme l’exigent les chemins relatifs de la page.
 
-Ouvrir `index.html` localement ou le publier avec GitHub Pages.
+La page racine redirige vers le comparateur.
